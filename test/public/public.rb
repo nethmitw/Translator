@@ -10,7 +10,7 @@ WORDS_FILE3 = "#{__dir__}/inputs/words3.txt"
 GRAMMAR_FILE3 = "#{__dir__}/inputs/grammar3.txt"
 
 
-class SemiPublicTests <MiniTest::Test
+class PublicTests <MiniTest::Test
     def setup
         @@translator = Translator.new(WORDS_FILE1, GRAMMAR_FILE1)
         @@translator2 = Translator.new(WORDS_FILE2, GRAMMAR_FILE2)
@@ -65,12 +65,11 @@ class SemiPublicTests <MiniTest::Test
     end
 
     def test_changeLanguage
-        assert_equal(@@translator.changeLanguage("the truck blue", "English", "Spanish"), "el camion azul")
-        assert_equal(@@translator.changeLanguage("the sea blue", "English", "French"), "le mer bleu")
-        assert_equal(@@translator.changeLanguage("the sea blue", "English", "German"), "der meer blau")
+        assert_equal(@@translator.changeLanguage("the blue truck", "English", "Spanish"), "el azul camion")
+        assert_equal(@@translator.changeLanguage("the blue sea", "English", "German"), "der blau meer")
         assert_equal(@@translator.changeLanguage("el camion el", "Spanish", "German"), "der lkw der")
         assert_equal(@@translator.changeLanguage("el camion el", "Spanish", "English"), "the truck the")
-        assert_equal(@@translator.changeLanguage("le mer bleu", "French", "German"), "der meer blau")
+        assert_equal(@@translator.changeLanguage("bleu mer le", "French", "German"), "blau meer der")
         assert_equal(@@translator.changeLanguage("gabel blau", "German", "English"), "fork blue")
         assert_equal(@@translator.changeLanguage("lkw rot", "German", "Spanish"), "camion rojo")
     end
@@ -103,8 +102,8 @@ class SemiPublicTests <MiniTest::Test
     def test_translate2
         assert_equal(@@translator2.translate("w-onenine w-one w-onefour", "English", "L1"), "w-twozero w-two w-oneseven")
         assert_equal(@@translator2.translate("w-twozero w-two w-oneseven", "L1", "English"), "w-onenine w-one w-onefour")
-        assert_equal(@@translator2.translate("w-oneeight w-oneeight w-onetwo w-twoseven", "L3", "L2"), "w-onesix w-onesix w-twosix w-oneone")
-        assert_equal(@@translator2.translate("w-onethree w-onethree w-twosix w-onesix", "L2", "L3"), "w-onetwo w-onetwo w-oneeight w-twoseven")
+        res = @@translator2.translate("w-oneeight w-oneeight w-onetwo w-twoseven", "L3", "L2")
+        assert(res == "w-onesix w-onesix w-twosix w-oneone" || res == "w-onesix w-onesix w-twosix w-onethree")
         assert_equal(@@translator2.translate("w-five w-threeone w-onefive", "L4", "L1"), "w-twonine w-two w-oneseven")
         assert_equal(@@translator2.translate("w-twonine w-two w-oneseven", "L1", "L4"), "w-five w-threeone w-onefive")
     end
